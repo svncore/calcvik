@@ -2,6 +2,8 @@
 
 A desktop calculator built with Avalonia and .NET 10. It supports standard calculations, scientific expressions, and integer operations in multiple number systems.
 
+![Calcvik in standard mode](screenshots/calcvik.png)
+
 ## Features
 
 - **Standard mode:** arithmetic, percentages, square, square root, and reciprocal.
