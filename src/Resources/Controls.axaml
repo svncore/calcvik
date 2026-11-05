@@ -1,0 +1,373 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Base button: filled tile, 12 radius, 48 min target, border reserved for focus only -->
+    <Style Selector="Button">
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="MinHeight" Value="56"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <!-- Smooth colour transition on the template background -->
+    <Style Selector="Button /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.16"/>
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <!-- Interaction states (neutral default) -->
+    <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralHoverBrush}"/>
+    </Style>
+    <Style Selector="Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralPressedBrush}"/>
+    </Style>
+    <Style Selector="Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource DisabledSurfaceBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabledBrush}"/>
+        <Setter Property="Opacity" Value="1"/>
+    </Style>
+    <Style Selector="Button:disabled">
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabledBrush}"/>
+        <Setter Property="Opacity" Value="1"/>
+    </Style>
+    <Style Selector="Button:focus-visible /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BoxShadow" Value="0 0 6 #660067C0"/>
+    </Style>
+
+    <!-- Operation buttons: secondary-container tonal step -->
+    <Style Selector="Button.op">
+        <Setter Property="Background" Value="{DynamicResource ButtonOperationBrush}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontSize" Value="20"/>
+    </Style>
+    <Style Selector="Button.op:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonOperationHoverBrush}"/>
+    </Style>
+    <Style Selector="Button.op:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonOperationPressedBrush}"/>
+    </Style>
+
+    <!-- Active base / segmented selection: primary-container chip, normal weight -->
+    <Style Selector="Button.op.active">
+        <Setter Property="Background" Value="{DynamicResource SelectedBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource OnSelectedBrush}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+    </Style>
+    <Style Selector="Button.op.active:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource SelectedBrush}"/>
+    </Style>
+
+    <!-- Programmer bitwise row: lighter tier than the arithmetic ops -->
+    <Style Selector="Button.fn">
+        <Setter Property="Background" Value="{DynamicResource SecondaryContainerBrush}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontSize" Value="18"/>
+    </Style>
+    <Style Selector="Button.fn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonOperationHoverBrush}"/>
+    </Style>
+    <Style Selector="Button.fn:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonOperationPressedBrush}"/>
+    </Style>
+
+    <!-- Equals: the single filled primary action -->
+    <Style Selector="Button.equals">
+        <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource AccentForegroundBrush}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="20"/>
+    </Style>
+    <Style Selector="Button.equals /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource AccentForegroundBrush}"/>
+    </Style>
+    <Style Selector="Button.equals:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentHoverBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource AccentForegroundBrush}"/>
+    </Style>
+    <Style Selector="Button.equals:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentPressedBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource AccentForegroundBrush}"/>
+    </Style>
+    <Style Selector="Button.equals:disabled /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource DisabledSurfaceBrush}"/>
+    </Style>
+
+    <!-- Utility keys (C, backspace, +/-): same tile family as the rest, so they never read as disabled -->
+    <Style Selector="Button.func">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TileBorderBrush}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        <Setter Property="MinHeight" Value="48"/>
+    </Style>
+    <Style Selector="Button.func:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralHoverBrush}"/>
+    </Style>
+    <Style Selector="Button.func:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralPressedBrush}"/>
+    </Style>
+
+    <!-- Memory keys: real 48px tiles instead of bare labels -->
+    <Style Selector="Button.mem">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TileBorderBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="MinHeight" Value="48"/>
+        <Setter Property="Padding" Value="0"/>
+    </Style>
+    <Style Selector="Button.mem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralHoverBrush}"/>
+    </Style>
+    <Style Selector="Button.mem:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralPressedBrush}"/>
+    </Style>
+
+    <!-- Disabled digit keys keep their tile, only the label de-emphasises -->
+    <Style Selector="Button.digit:disabled">
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabledBrush}"/>
+        <Setter Property="Opacity" Value="1"/>
+    </Style>
+    <Style Selector="Button.digit:disabled /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Opacity" Value="1"/>
+    </Style>
+
+    <!-- Neutral digit buttons: container-high -->
+    <Style Selector="Button.digit">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TileBorderBrush}"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+    </Style>
+
+    <!-- Navigation buttons in the side pane -->
+    <Style Selector="Button.nav">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="Padding" Value="12,0"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="MinHeight" Value="48"/>
+    </Style>
+    <Style Selector="Button.nav:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralHoverBrush}"/>
+    </Style>
+    <Style Selector="Button.nav:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralPressedBrush}"/>
+    </Style>
+    <Style Selector="Button.nav.active">
+        <Setter Property="Background" Value="{DynamicResource SoftAccentBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource OnSoftAccentBrush}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+    </Style>
+    <Style Selector="Button.nav.active:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource SoftAccentBrush}"/>
+    </Style>
+
+    <!-- Square icon button (navigation toggle / pane close) -->
+    <Style Selector="Button.icon">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Width" Value="48"/>
+        <Setter Property="MinHeight" Value="48"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="FontSize" Value="20"/>
+    </Style>
+    <Style Selector="Button.icon:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralHoverBrush}"/>
+    </Style>
+    <Style Selector="Button.icon:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralPressedBrush}"/>
+    </Style>
+
+    <!-- Tile families: hover/pressed keep the tile edge visible (background + border on the presenter) -->
+    <Style Selector="Button.digit:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralHoverBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TileHoverBorderBrush}"/>
+    </Style>
+    <Style Selector="Button.digit:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralPressedBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TileHoverBorderBrush}"/>
+    </Style>
+    <Style Selector="Button.sci:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralHoverBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TileHoverBorderBrush}"/>
+    </Style>
+    <Style Selector="Button.sci:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralPressedBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TileHoverBorderBrush}"/>
+    </Style>
+    <Style Selector="Button.mem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralHoverBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TileHoverBorderBrush}"/>
+    </Style>
+    <Style Selector="Button.mem:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralPressedBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TileHoverBorderBrush}"/>
+    </Style>
+    <Style Selector="Button.func:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralHoverBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TileHoverBorderBrush}"/>
+    </Style>
+    <Style Selector="Button.func:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralPressedBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TileHoverBorderBrush}"/>
+    </Style>
+
+    <!-- Typography: display 46 / key 20 / title 16 / utility 14 / label 12 -->
+    <Style Selector="TextBlock.result">
+        <Setter Property="FontSize" Value="46"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="TextAlignment" Value="Right"/>
+    </Style>
+    <Style Selector="TextBlock.expression">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="TextAlignment" Value="Right"/>
+        <Setter Property="MinHeight" Value="20"/>
+    </Style>
+    <Style Selector="TextBlock.caption">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- Inputs -->
+    <Style Selector="ComboBox.compact">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource SubtleBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="8,0"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="MinHeight" Value="44"/>
+    </Style>
+    <Style Selector="ComboBox.compact:pointerover">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralHoverBrush}"/>
+    </Style>
+    <Style Selector="ComboBox.compact:pressed">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralPressedBrush}"/>
+    </Style>
+    <Style Selector="TextBox.expression-input">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="MinHeight" Value="44"/>
+        <Setter Property="CornerRadius" Value="8"/>
+    </Style>
+
+    <!-- Panels: display card surface-container with 16 radius -->
+    <Style Selector="Border.panel">
+        <Setter Property="Background" Value="{DynamicResource AppSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource SubtleBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="16"/>
+        <Setter Property="Padding" Value="8"/>
+    </Style>
+
+    <!-- Error state: error-container surface + on-error-container text -->
+    <Style Selector="Border.panel.error">
+        <Setter Property="Background" Value="{DynamicResource ErrorContainerBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ErrorBrush}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    <Style Selector="Border.panel.error TextBlock.result">
+        <Setter Property="Foreground" Value="{DynamicResource OnErrorContainerBrush}"/>
+    </Style>
+    <Style Selector="Border.panel.error TextBlock.expression">
+        <Setter Property="Foreground" Value="{DynamicResource OnErrorContainerBrush}"/>
+    </Style>
+
+    <!-- Scientific helper buttons: container-high tiles, no hairline -->
+    <Style Selector="Button.sci">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TileBorderBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="MinHeight" Value="48"/>
+    </Style>
+    <Style Selector="Button.sci:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralHoverBrush}"/>
+    </Style>
+    <Style Selector="Button.sci:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonNeutralPressedBrush}"/>
+    </Style>
+
+    <!-- Persistent toggle chip (DEG/RAD): secondary-container tint -->
+    <Style Selector="Button.sci.chip">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TileBorderBrush}"/>
+    </Style>
+    <Style Selector="Button.sci.chip.engaged">
+        <Setter Property="Background" Value="{DynamicResource SoftAccentBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource OnSoftAccentBrush}"/>
+    </Style>
+    <Style Selector="Button.sci.chip:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonOperationHoverBrush}"/>
+    </Style>
+    <Style Selector="Button.sci.chip:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ButtonOperationPressedBrush}"/>
+    </Style>
+    <Style Selector="Button.sci.chip.active">
+        <Setter Property="Background" Value="{DynamicResource SoftAccentBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource OnSoftAccentBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource SoftAccentBrush}"/>
+    </Style>
+    <Style Selector="Button.sci.chip.active:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource SoftAccentBrush}"/>
+    </Style>
+
+    <!-- Editable expression line: focus ring without layout shift -->
+    <Style Selector="TextBox.inline-expression:focus /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <!-- Editable expression line inside the display (MS-calculator style, no separate input box) -->
+    <Style Selector="TextBox.inline-expression">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="MinHeight" Value="20"/>
+        <Setter Property="MaxWidth" Value="400"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="TextAlignment" Value="Right"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource AccentBrush}"/>
+    </Style>
+
+    <Style Selector="Border.panel.error TextBox.inline-expression">
+        <Setter Property="Foreground" Value="{DynamicResource OnErrorContainerBrush}"/>
+        <Setter Property="PlaceholderForeground" Value="{DynamicResource OnErrorContainerBrush}"/>
+    </Style>
+
+</Styles>

@@ -1,0 +1,269 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Calcvik.ViewModels"
+        x:Class="Calcvik.Views.MainWindow"
+        x:DataType="vm:CalculatorViewModel"
+        Title="Calcvik"
+        Width="{Binding WindowWidth}"
+        Height="{Binding WindowHeight}"
+        SizeToContent="Manual"
+        MinWidth="360"
+        MinHeight="480"
+        Focusable="True"
+        Background="{DynamicResource AppWindowBackgroundBrush}"
+        WindowStartupLocation="CenterScreen">
+
+    <SplitView IsPaneOpen="{Binding IsNavOpen, Mode=TwoWay}"
+               DisplayMode="Overlay"
+               PanePlacement="Left"
+               OpenPaneLength="200">
+
+        <!-- Side navigation: mode + theme -->
+        <SplitView.Pane>
+            <Border Background="{DynamicResource AppSurfaceBrush}"
+                    BorderBrush="{DynamicResource SubtleBorderBrush}"
+                    BorderThickness="0,0,1,0">
+                <StackPanel Margin="8,16" Spacing="4">
+                    <Button Classes="icon" Content="✕" HorizontalAlignment="Right"
+                            AutomationProperties.Name="Close menu" Command="{Binding ToggleNavCommand}"/>
+                    <TextBlock Classes="caption" Text="MODE" FontSize="12" Margin="12,0,0,8"/>
+                    <Button Classes="nav" Classes.active="{Binding IsStandardMode}"
+                            Content="Standard" Command="{Binding SelectModeCommand}" CommandParameter="Standard"/>
+                    <Button Classes="nav" Classes.active="{Binding IsScientificMode}"
+                            Content="Scientific" Command="{Binding SelectModeCommand}" CommandParameter="Scientific"/>
+                    <Button Classes="nav" Classes.active="{Binding IsProgrammerMode}"
+                            Content="Programmer" Command="{Binding SelectModeCommand}" CommandParameter="Programmer"/>
+                    <TextBlock Classes="caption" Text="THEME" FontSize="12" Margin="12,16,0,8"/>
+                    <StackPanel Spacing="4">
+                        <Button Classes="nav" Classes.active="{Binding IsLightTheme}" Content="Light"
+                                Command="{Binding SetThemeCommand}" CommandParameter="Light"/>
+                        <Button Classes="nav" Classes.active="{Binding IsDarkTheme}" Content="Dark"
+                                Command="{Binding SetThemeCommand}" CommandParameter="Dark"/>
+                        <Button Classes="nav" Classes.active="{Binding IsSystemTheme}" Content="System"
+                                Command="{Binding SetThemeCommand}" CommandParameter="System"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </SplitView.Pane>
+
+        <Grid Margin="12" ColumnSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" MinWidth="380"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Compact header: navigation, current mode, memory indicator -->
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Classes="icon" Content="☰"
+                        AutomationProperties.Name="Open menu" Command="{Binding ToggleNavCommand}"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding SelectedMode}" FontSize="16" FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                    <TextBlock Classes="caption" Text="M" IsVisible="{Binding HasMemory}"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Display: expression line above the result (full width, as in Windows Calculator) -->
+            <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Classes="panel" Classes.error="{Binding IsError}" Margin="0,8,0,0">
+                <StackPanel Margin="12,8,4,8" Spacing="2">
+                    <TextBlock Classes="expression" Text="{Binding Expression}" IsVisible="{Binding !IsScientific}"/>
+                    <TextBox Classes="inline-expression" Text="{Binding ExpressionInput}"
+                             MaxWidth="400" IsVisible="{Binding IsScientific}"/>
+                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly"
+                             HorizontalAlignment="Right" Height="64" MinHeight="64" MaxWidth="400">
+                        <TextBlock Classes="result" Text="{Binding DisplayText}"/>
+                    </Viewbox>
+                </StackPanel>
+            </Border>
+
+            <!-- Mode strip: DEG for Scientific, bitwise row for Programmer -->
+            <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,0,0" ColumnSpacing="8">
+                <StackPanel Orientation="Horizontal" Spacing="8" IsVisible="{Binding IsScientific}">
+                    <Button Classes="sci chip engaged" Content="{Binding AngleModeText}" MinWidth="60"
+                            Command="{Binding ToggleAngleModeCommand}"/>
+                    <Button Classes="sci chip" Content="2nd" MinWidth="60"
+                            Classes.active="{Binding IsInverseMode}" Command="{Binding ToggleInverseCommand}"/>
+                </StackPanel>
+                <Grid ColumnSpacing="8" IsVisible="{Binding IsProgrammer}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Classes="fn" Content="AND" Command="{Binding BitwiseAndCommand}"/>
+                    <Button Grid.Column="1" Classes="fn" Content="OR" Command="{Binding BitwiseOrCommand}"/>
+                    <Button Grid.Column="2" Classes="fn" Content="XOR" Command="{Binding BitwiseXorCommand}"/>
+                    <Button Grid.Column="3" Classes="fn" Content="NOT" Command="{Binding BitwiseNotCommand}"/>
+                    <Button Grid.Column="4" Classes="fn" Content="&lt;&lt;" Command="{Binding LeftShiftCommand}"/>
+                    <Button Grid.Column="5" Classes="fn" Content="&gt;&gt;" Command="{Binding RightShiftCommand}"/>
+                </Grid>
+            </Grid>
+
+            <!-- Memory row -->
+            <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,0,0" ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Classes="mem" Content="MC" Command="{Binding MemoryClearCommand}"/>
+                <Button Grid.Column="1" Classes="mem" Content="MR" Command="{Binding MemoryRecallCommand}"/>
+                <Button Grid.Column="2" Classes="mem" Content="M+" Command="{Binding MemoryAddCommand}"/>
+                <Button Grid.Column="3" Classes="mem" Content="M-" Command="{Binding MemorySubtractCommand}"/>
+                <Button Grid.Column="4" Classes="mem" Content="MS" Command="{Binding MemoryStoreCommand}"/>
+            </Grid>
+
+            <!-- Scientific function block: page 1 / page 2 (2nd) share the same 5-row rhythm -->
+            <Grid Grid.Row="4" Grid.Column="0" Margin="0,8,8,0" RowSpacing="8" ColumnSpacing="8"
+                  IsVisible="{Binding IsScientific}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="60"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Row="0" Grid.Column="0" Classes="sci" Content="sin" IsVisible="{Binding !IsInverseMode}" Command="{Binding InsertTextCommand}" CommandParameter="sin("/>
+                <Button Grid.Row="0" Grid.Column="1" Classes="sci" Content="cos" IsVisible="{Binding !IsInverseMode}" Command="{Binding InsertTextCommand}" CommandParameter="cos("/>
+                <Button Grid.Row="1" Grid.Column="0" Classes="sci" Content="tan" IsVisible="{Binding !IsInverseMode}" Command="{Binding InsertTextCommand}" CommandParameter="tan("/>
+                <Button Grid.Row="1" Grid.Column="1" Classes="sci" Content="π" IsVisible="{Binding !IsInverseMode}" Command="{Binding InsertTextCommand}" CommandParameter="pi"/>
+                <Button Grid.Row="2" Grid.Column="0" Classes="sci" Content="√" IsVisible="{Binding !IsInverseMode}" Command="{Binding SquareRootCommand}"/>
+                <Button Grid.Row="2" Grid.Column="1" Classes="sci" Content="x²" IsVisible="{Binding !IsInverseMode}" Command="{Binding SquareCommand}"/>
+
+                <Button Grid.Row="0" Grid.Column="0" Classes="sci" Content="sin⁻¹" IsVisible="{Binding IsInverseMode}" Command="{Binding InsertTextCommand}" CommandParameter="asin("/>
+                <Button Grid.Row="0" Grid.Column="1" Classes="sci" Content="cos⁻¹" IsVisible="{Binding IsInverseMode}" Command="{Binding InsertTextCommand}" CommandParameter="acos("/>
+                <Button Grid.Row="1" Grid.Column="0" Classes="sci" Content="tan⁻¹" IsVisible="{Binding IsInverseMode}" Command="{Binding InsertTextCommand}" CommandParameter="atan("/>
+                <Button Grid.Row="1" Grid.Column="1" Classes="sci" Content="e" IsVisible="{Binding IsInverseMode}" Command="{Binding InsertTextCommand}" CommandParameter="e"/>
+                <Button Grid.Row="2" Grid.Column="0" Classes="sci" Content="log" IsVisible="{Binding IsInverseMode}" Command="{Binding InsertTextCommand}" CommandParameter="log("/>
+                <Button Grid.Row="2" Grid.Column="1" Classes="sci" Content="ln" IsVisible="{Binding IsInverseMode}" Command="{Binding InsertTextCommand}" CommandParameter="ln("/>
+
+                <Button Grid.Row="3" Grid.Column="0" Classes="sci" Content="1/x" Command="{Binding ReciprocalCommand}"/>
+                <Button Grid.Row="3" Grid.Column="1" Classes="sci" Content="%" Command="{Binding PercentCommand}"/>
+                <Button Grid.Row="4" Grid.Column="0" Classes="sci" Content="(" Command="{Binding InsertTextCommand}" CommandParameter="("/>
+                <Button Grid.Row="4" Grid.Column="1" Classes="sci" Content=")" Command="{Binding InsertTextCommand}" CommandParameter=")"/>
+            </Grid>
+
+            <!-- Programmer base / hex-digit block: same 5-row rhythm as the keypad -->
+            <Grid Grid.Row="4" Grid.Column="0" Margin="0,8,8,0" RowSpacing="8" ColumnSpacing="8"
+                  IsVisible="{Binding IsProgrammer}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="86"/>
+                    <ColumnDefinition Width="86"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Row="0" Grid.Column="0" Classes="op" Classes.active="{Binding IsHexBase}" Padding="8,4"
+                        Command="{Binding SetBaseCommand}" CommandParameter="HEX">
+                    <StackPanel Spacing="0" VerticalAlignment="Center">
+                        <TextBlock Text="HEX" FontSize="11" Opacity="0.7" HorizontalAlignment="Left"/>
+                        <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Height="16">
+                            <TextBlock Text="{Binding HexValue}" FontSize="14"/>
+                        </Viewbox>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Row="0" Grid.Column="1" Classes="op" Classes.active="{Binding IsDecimalBase}" Padding="8,4"
+                        Command="{Binding SetBaseCommand}" CommandParameter="DEC">
+                    <StackPanel Spacing="0" VerticalAlignment="Center">
+                        <TextBlock Text="DEC" FontSize="11" Opacity="0.7" HorizontalAlignment="Left"/>
+                        <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Height="16">
+                            <TextBlock Text="{Binding DecValue}" FontSize="14"/>
+                        </Viewbox>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Row="1" Grid.Column="0" Classes="op" Classes.active="{Binding IsOctalBase}" Padding="8,4"
+                        Command="{Binding SetBaseCommand}" CommandParameter="OCT">
+                    <StackPanel Spacing="0" VerticalAlignment="Center">
+                        <TextBlock Text="OCT" FontSize="11" Opacity="0.7" HorizontalAlignment="Left"/>
+                        <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Height="16">
+                            <TextBlock Text="{Binding OctValue}" FontSize="14"/>
+                        </Viewbox>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Row="1" Grid.Column="1" Classes="op" Classes.active="{Binding IsBinaryBase}" Padding="8,4"
+                        Command="{Binding SetBaseCommand}" CommandParameter="BIN">
+                    <StackPanel Spacing="0" VerticalAlignment="Center">
+                        <TextBlock Text="BIN" FontSize="11" Opacity="0.7" HorizontalAlignment="Left"/>
+                        <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Height="16">
+                            <TextBlock Text="{Binding BinValue}" FontSize="14"/>
+                        </Viewbox>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Row="2" Grid.Column="0" Classes="digit" Content="A" IsEnabled="{Binding IsHexBase}" Command="{Binding DigitCommand}" CommandParameter="A"/>
+                <Button Grid.Row="2" Grid.Column="1" Classes="digit" Content="B" IsEnabled="{Binding IsHexBase}" Command="{Binding DigitCommand}" CommandParameter="B"/>
+                <Button Grid.Row="3" Grid.Column="0" Classes="digit" Content="C" IsEnabled="{Binding IsHexBase}" Command="{Binding DigitCommand}" CommandParameter="C"/>
+                <Button Grid.Row="3" Grid.Column="1" Classes="digit" Content="D" IsEnabled="{Binding IsHexBase}" Command="{Binding DigitCommand}" CommandParameter="D"/>
+                <Button Grid.Row="4" Grid.Column="0" Classes="digit" Content="E" IsEnabled="{Binding IsHexBase}" Command="{Binding DigitCommand}" CommandParameter="E"/>
+                <Button Grid.Row="4" Grid.Column="1" Classes="digit" Content="F" IsEnabled="{Binding IsHexBase}" Command="{Binding DigitCommand}" CommandParameter="F"/>
+            </Grid>
+
+            <!-- Keypad -->
+            <Grid Grid.Row="4" Grid.Column="1" Margin="0,8,0,0" RowSpacing="8" ColumnSpacing="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Row="0" Grid.Column="0" Classes="func" Content="C" Command="{Binding ClearCommand}"/>
+                <Button Grid.Row="0" Grid.Column="1" Classes="func" Content="←"
+                        AutomationProperties.Name="Backspace" Command="{Binding BackspaceCommand}"/>
+                <Button Grid.Row="0" Grid.Column="2" Classes="func" Content="±" Command="{Binding NegateCommand}"/>
+                <Button Grid.Row="0" Grid.Column="3" Classes="op" Content="÷" Command="{Binding DivideCommand}"/>
+
+                <Button Grid.Row="1" Grid.Column="0" Classes="digit" Content="7" Command="{Binding DigitCommand}" CommandParameter="7"/>
+                <Button Grid.Row="1" Grid.Column="1" Classes="digit" Content="8" Command="{Binding DigitCommand}" CommandParameter="8"/>
+                <Button Grid.Row="1" Grid.Column="2" Classes="digit" Content="9" Command="{Binding DigitCommand}" CommandParameter="9"/>
+                <Button Grid.Row="1" Grid.Column="3" Classes="op" Content="×" Command="{Binding MultiplyCommand}"/>
+
+                <Button Grid.Row="2" Grid.Column="0" Classes="digit" Content="4" IsEnabled="{Binding IsTwoToSevenEnabled}" Command="{Binding DigitCommand}" CommandParameter="4"/>
+                <Button Grid.Row="2" Grid.Column="1" Classes="digit" Content="5" IsEnabled="{Binding IsTwoToSevenEnabled}" Command="{Binding DigitCommand}" CommandParameter="5"/>
+                <Button Grid.Row="2" Grid.Column="2" Classes="digit" Content="6" IsEnabled="{Binding IsTwoToSevenEnabled}" Command="{Binding DigitCommand}" CommandParameter="6"/>
+                <Button Grid.Row="2" Grid.Column="3" Classes="op" Content="−" Command="{Binding SubtractCommand}"/>
+
+                <Button Grid.Row="3" Grid.Column="0" Classes="digit" Content="1" Command="{Binding DigitCommand}" CommandParameter="1"/>
+                <Button Grid.Row="3" Grid.Column="1" Classes="digit" Content="2" IsEnabled="{Binding IsTwoToSevenEnabled}" Command="{Binding DigitCommand}" CommandParameter="2"/>
+                <Button Grid.Row="3" Grid.Column="2" Classes="digit" Content="3" IsEnabled="{Binding IsTwoToSevenEnabled}" Command="{Binding DigitCommand}" CommandParameter="3"/>
+                <Button Grid.Row="3" Grid.Column="3" Classes="op" Content="+" Command="{Binding AddCommand}"/>
+
+                <Button Grid.Row="4" Grid.Column="0" Classes="digit" Content="0" Command="{Binding DigitCommand}" CommandParameter="0"/>
+                <Button Grid.Row="4" Grid.Column="1" Classes="digit" Content="." Command="{Binding DecimalCommand}"/>
+                <Button Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" Classes="equals" Content="=" Command="{Binding EqualsCommand}"/>
+            </Grid>
+        </Grid>
+
+    </SplitView>
+</Window>

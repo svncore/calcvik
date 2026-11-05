@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/Calcvik.csproj" />
+  <Project Path="tests/Calcvik.Tests/Calcvik.Tests.csproj" />
+</Solution>
