@@ -4,6 +4,7 @@
         x:Class="Calcvik.Views.MainWindow"
         x:DataType="vm:CalculatorViewModel"
         Title="Calcvik"
+        Icon="/Assets/calcvik.png"
         Width="{Binding WindowWidth}"
         Height="{Binding WindowHeight}"
         SizeToContent="Manual"

@@ -37,6 +37,8 @@ dotnet build Calcvik.slnx
 dotnet test Calcvik.slnx
 ```
 
+GitHub Actions tests the project on Linux, Windows, and macOS. Pushes to `main` publish a GitHub Release with portable archives, a Windows MSI, Linux AppImage and Debian packages, and DMGs for Intel and Apple Silicon Macs.
+
 ## Keyboard controls
 
 | Key | Action |

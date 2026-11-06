@@ -1,0 +1,6 @@
+Package: calcvik
+Version: __VERSION__
+Architecture: amd64
+Maintainer: svncore
+Description: Desktop calculator
+ Calcvik provides standard, scientific, and programmer calculator modes.

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Calcvik
+Comment=Desktop calculator
+Exec=Calcvik
+Icon=calcvik
+Categories=Utility;Calculator;
+Terminal=false
